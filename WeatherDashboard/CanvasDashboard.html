@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script type="text/javascript">
+window.onload = function () {
+var dataPointsH = []; 
+var dataPointsT = [];
+var i = 0;
+$.getJSON("WeatherData.json", function(data) {  //We are getting the information from our JSON file
+	$.each(data.Weather, function(key, value){
+		dataPointsH.push({x: i, y: parseInt(value.humidity)});
+		dataPointsT.push({x: i, y: parseInt(value.temp)});
+		i++;
+	});
+	var chart = new CanvasJS.Chart("chartContainer",{
+	
+		axisY: {
+		//We are naming the Y axis of our graph Temp(Red)/Humidity(Blue)"
+		title:"Temp(Red)/Humidity(Blue)",
+		
+		},
+			
+		axisX:{		
+		// We are naming the X axis Time. We take the measurement every 30 minutes
+		title:"Time (Measurement taken every 30 mins)",			
+		},
+		
+		title:{
+			text:"Weather Station Data"
+		},
+		data: [{
+			type: "line", //Here we are creating a line graph
+			dataPoints : dataPointsH, //Here we are plotting our humidity data points
+		},
+		{
+			type: "line", //we are creating a line graph
+			dataPoints : dataPointsT, //We are plotting the temperature data points
+		}]
+	});
+	chart.render();
+});
+}
+</script>
+
+</head>
+<body>
+<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+</body>
+</html>
